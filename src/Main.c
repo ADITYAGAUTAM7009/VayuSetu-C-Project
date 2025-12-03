@@ -1,72 +1,34 @@
 #include "airplane.h"
-#include "history.h"
-#include "display.h"
-#include "booking.h"
-#include "pricecompare.h"
+#include <stdio.h>
+#include <stdlib.h>   // for rand()
 
-int myFlightIndex = -1;
-int myPNR = 0;
-int mySeat = 0;
+// shows all flights and lets the user pick one
+int select_flight(struct AIRPLANE planes[], int n) {
 
-char history[200][200];
-int history_count = 0;
+    printf("\nSelect a flight:\n");
 
-int main() {
-
-    add_history("Started VAYUSETU Application");
-
-    struct AIRPLANE planes[5] = {
-        {101, "DELHI", "MUMBAI", 180, 75},
-        {102, "CHANDIGARH", "GUJARAT", 160, 48},
-        {103, "DELHI", "BENGALURU", 200, 120},
-        {104, "MUMBAI", "KOLKATA", 150, 90},
-        {105, "GUWAHATI", "DELHI", 140, 60}
-    };
-
-    int n = 5, ch;
-
-    while (1) {
-        printf("\n============== VAYUSETU MENU ==============\n");
-        printf("1. View All Flights\n");
-        printf("2. Book a Seat\n");
-        printf("3. Cancel a Seat\n");
-        printf("4. View My Booking Details\n");
-        printf("5. Compare Prices\n");
-        printf("6. View History\n");
-        printf("7. Exit\n");
-        printf("============================================\n");
-
-        printf("Enter choice: ");
-        scanf("%d", &ch);
-
-        if (ch == 1) ALL_FLIGHTS(planes, n);
-
-        else if (ch == 2) {
-            int id = select_flight(planes, n);
-            if (id != -1) book_one_seat_now(&planes[id], id);
-        }
-
-        else if (ch == 3) {
-            int id = select_flight(planes, n);
-            if (id != -1) cancel_the_seat(planes, id);
-        }
-
-        else if (ch == 4) my_personal_booking(planes);
-
-        else if (ch == 5) {
-            int id = select_flight(planes, n);
-            if (id != -1) compare_the_rates(planes[id]);
-        }
-
-        else if (ch == 6) show_history();
-
-        else if (ch == 7) {
-            add_history("Exited Application");
-            break;
-        }
-
-        else printf("Invalid choice.\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d. Flight %d (%s -> %s)\n",
+               i + 1,
+               planes[i].flight_number,
+               planes[i].from,
+               planes[i].to);
     }
 
-    return 0;
+    printf("\nEnter option number: ");
+    int choice;
+    scanf("%d", &choice);
+
+    // simple check so user doesn’t pick something random
+    if (choice < 1 || choice > n) {
+        printf("\nInvalid choice.\n");
+        return -1;
+    }
+
+    return choice - 1; // converting user choice to array index
+}
+
+// makes a simple 8-digit PNR using random numbers
+int create_pnr() {
+    return 10000000 + (rand() % 90000000);
 }

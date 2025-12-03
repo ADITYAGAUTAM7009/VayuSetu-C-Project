@@ -1,44 +1,29 @@
-#include "history.h"
 #include <stdio.h>
-#include <string.h>
+#include "display.h"
+#include "airplane.h"
 
-// Just keeping a simple list to store whatever the user does.
-// Nothing complicated — each action gets stored as plain text.
-char history[200][200];
-int history_count = 0;
+// This function is basically the “home screen” of the program.
+// Just prints the main options in a simple, clean way.
+void show_main_menu() {
 
+    printf("\n========================================\n");
+    printf("          WELCOME TO VAYUSETU\n");
+    printf("========================================\n");
 
-// This function basically notes down whatever event happens.
-// Think of it like writing a quick diary line for the user’s action.
-void add_history(const char *event) {
+    // Keeping the menu short and sweet so the user doesn’t get confused.
+    printf("1. View All Flights\n");
+    printf("2. Search Flight\n");
+    printf("3. Book a Seat\n");
+    printf("4. Cancel a Seat\n");
+    printf("5. View Booking History\n");
+    printf("6. Compare Ticket Rates\n");
+    printf("7. Exit\n");
 
-    // Copying the event text into our history list.
-    // Using strcpy since it's quick and enough for our use case here.
-    strcpy(history[history_count], event);
-
-    // Moving to the next empty slot for future events.
-    history_count++;
+    printf("========================================\n");
+    printf("Enter your choice: ");
 }
 
 
-// Shows all the activity done so far.
-// Just prints everything nicely so the user can scroll through it.
-void show_history() {
 
-    // If nothing has happened yet, no point showing an empty list.
-    if (history_count == 0) {
-        printf("\nNo activity done yet.\n");
-        return;
-    }
-
-    // A small heading, just to make it look cleaner.
-    printf("\n******** USER ACTIVITY HISTORY ********\n\n");
-
-    // Looping through whatever we stored and printing it one by one.
-    for (int i = 0; i < history_count; i++) {
-        printf("%d. %s\n", i + 1, history[i]);
-    }
-
-    // A neat ending line — just for presentation.
-    printf("\n****************************************\n");
-}
+// Shows a single flight’s details in a clean “card-like” format.
+// Used internally by the main flight listi

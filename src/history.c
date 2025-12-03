@@ -1,43 +1,44 @@
-#include "display.h"
+#include "history.h"
 #include <stdio.h>
+#include <string.h>
 
-// just prints one flight’s basic details in a clean format
-void show_flight_info(struct AIRPLANE p) {
+// Just keeping a simple list to store whatever the user does.
+// Nothing complicated — each action gets stored as plain text.
+char history[200][200];
+int history_count = 0;
 
-    printf("\n---------------------------------------");
-    printf("\nFlight No : %d", p.flight_number);
-    printf("\nRoute     : %s -> %s", p.from, p.to);
-    printf("\nSeats     : Total %d | Booked %d | Available %d",
-           p.total_no_of_seats, p.booked_no_of_seats,
-           p.total_no_of_seats - p.booked_no_of_seats);
-    printf("\n---------------------------------------\n");
+
+// This function basically notes down whatever event happens.
+// Think of it like writing a quick diary line for the user’s action.
+void add_history(const char *event) {
+
+    // Copying the event text into our history list.
+    // Using strcpy since it's quick and enough for our use case here.
+    strcpy(history[history_count], event);
+
+    // Moving to the next empty slot for future events.
+    history_count++;
 }
 
-// shows every flight in the system one by one
-void ALL_FLIGHTS(struct AIRPLANE a[], int n) {
-    add_history("Viewed All Flights");   // noting that user checked all flights
 
-    printf("\n******** VIEW ALL FLIGHTS ********\n");
-    for (int i = 0; i < n; i++) {
-        show_flight_info(a[i]);          // using the same display function
+// Shows all the activity done so far.
+// Just prints everything nicely so the user can scroll through it.
+void show_history() {
+
+    // If nothing has happened yet, no point showing an empty list.
+    if (history_count == 0) {
+        printf("\nNo activity done yet.\n");
+        return;
     }
-}
 
-// prints the user's currently booked flight (if any)
-void my_personal_booking(struct AIRPLANE arr[]) {
+    // A small heading, just to make it look cleaner.
+    printf("\n******** USER ACTIVITY HISTORY ********\n\n");
 
-    add_history("Viewed My Booking Details");   // logging what user viewed
-
-    if (myFlightIndex == -1) {
-        printf("\nYou have not booked any flight yet.\n");   // nothing booked so far
-    } else {
-
-        printf("\n******** YOUR BOOKING DETAILS ********\n");
-
-        show_flight_info(arr[myFlightIndex]);   // showing the flight you booked
-
-        printf("Your PNR Number : %d\n", myPNR);
-        printf("Your Seat Number: %d\n", mySeat);
-        printf("---------------------------------------\n");
+    // Looping through whatever we stored and printing it one by one.
+    for (int i = 0; i < history_count; i++) {
+        printf("%d. %s\n", i + 1, history[i]);
     }
+
+    // A neat ending line — just for presentation.
+    printf("\n****************************************\n");
 }
